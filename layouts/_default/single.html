@@ -1,7 +1,23 @@
 {{ define "main" -}}
 <div class="post">
   <h1>{{ .Title }}</h1>
-  <time datetime={{ .Date.Format "2006-01-02T15:04:05Z0700" }} class="post-date">{{ .Date.Format "Mon, Jan 2, 2006" }}</time>
+  <time datetime={{ .Date.Format "2006-01-02T15:04:05Z0700" }} class="post-date">{{ .Date.Format "Mon, Jan 2, 2006" }}
+
+  {{ $tags := slice }}
+  {{ with .Params.tags }}
+  <!--separator between date and tags-->
+  &middot;
+    <span class="post-tags">
+      {{ range . }}
+        {{ $href := print ("/" | absLangURL) (. | urlize) "/" }}
+        {{ $element := printf "<a href=\"%s\">%s</a>" $href . }}
+        {{ $tags = $tags | append $element }}
+      {{ end }}
+      {{ delimit $tags ", " }}
+    {{ end }}
+    </span>
+
+  </time>
   {{ .Content }}
 </div>
 
